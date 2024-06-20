@@ -23,6 +23,10 @@ const userSchema  = new mongoose.Schema({
         minLength: 8,
         maxLength: 12
     },
+    UID: {
+        type: Number,
+        required: true,
+    },
     characters: [{
         key: String,
         level: Number,

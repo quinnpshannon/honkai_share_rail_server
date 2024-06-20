@@ -54,6 +54,21 @@ router.get('/:username', async (req, res) => {
         console.log(error);
     }
 });
+router.put('/char/:username', async (req, res) => {
+    try {
+        const characters = req.body;
+        console.log(characters)
+        const user = await User.findOneAndUpdate({username: req.params.username}, { characters: characters });
+        res.send({
+            Username: user.displayName,
+            characters: user.characters
+        });
+    }
+    catch (error) {
+        res.send({error: 'Error, Invalid data'});
+        console.log(error);
+    }
+});
 
 router.delete('/:id', async (req, res) => {
     try {
@@ -73,7 +88,7 @@ router.delete('/:id', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     try {
-        const usernameTaken = await User.findOne({suername: req.body.username});
+        const usernameTaken = await User.findOne({username: req.body.username});
         console.log(usernameTaken);
 
         if (usernameTaken) {
