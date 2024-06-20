@@ -31,6 +31,7 @@ const userSchema  = new mongoose.Schema({
         key: String,
         level: Number,
         lightcone: String,
+        value: {},
         traces: [{
             id: String,
             level: {
