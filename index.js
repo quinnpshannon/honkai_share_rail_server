@@ -5,6 +5,7 @@ import morgan from 'morgan';
 import userRouter from './routes/users.js';
 import authRouter from './routes/auth.js';
 import cors from 'cors'
+
 //env variables
 dotenv.config();
 

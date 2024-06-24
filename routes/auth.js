@@ -1,7 +1,12 @@
 import express from 'express';
-import User from '../models/Users.js'
+import User from '../models/Users.js';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv'
+dotenv.config();
 
 const router = new express.Router();
+
+const saltRounds = Number(process.env.SALTROUNDS);
 
 router.post('/signup', async (req, res) => {
     // res.send('Doing some Auth stuff');
@@ -17,17 +22,17 @@ router.post('/signup', async (req, res) => {
         const newUser = {
             username: req.body.username,
             displayName: req.body.username,
-            password: req.body.password,
             UID: req.body.UID,
             email: req.body.email,
             characters: []
         }
+        newUser.password = await bcrypt.hash(await req.body.password, saltRounds);
+        const user = await User.create(newUser);
         // req.body
         // username
         // password
         // uid
         // email
-        const user = await User.create(newUser);
         const responseUser={
             username: newUser.username,
             displayName: newUser.displayName,
@@ -47,7 +52,7 @@ router.post('/signin', async (req, res) => {
             console.log('No user!')
             return res.send('Something went wrong! Check your credentials.');
         }
-        if(await dbUser.password !== req.body.password) {
+        if(await !bcrypt.compare(req.body.password, dbUser.password)) {
             console.log(`Bad Login attempt for ${dbUser.username}`);
             return res.send('Something went wrong! Check your credentials.');
         }

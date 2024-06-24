@@ -1,7 +1,9 @@
 import express from 'express';
 import User from '../models/Users.js'
+import bcrypt from 'bcrypt'
 
 const router = new express.Router();
+const saltRounds = process.env.SALTROUNDS;
 
 router.get('/', async (req, res) => {
     try {
@@ -27,10 +29,15 @@ router.post('/', async (req, res) => {
     try {
         const usernameTaken = await User.findOne({username: req.body.username});
         console.log(usernameTaken);
-
         if (usernameTaken) {
             return res.send('username not available!');
         }
+        const hashUser = req.body;
+        bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+            console.log(req.body.password);
+            console.log(hash);
+        })
+        // hashUser.password = bcrypt.hash(req.body.password, saltRounds)
         const user = await User.create(req.body);
         res.send(user);
         // res.json(user).status(203);
