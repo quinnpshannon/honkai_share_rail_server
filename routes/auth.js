@@ -52,17 +52,17 @@ router.post('/signin', async (req, res) => {
             console.log('No user!')
             return res.send('Something went wrong! Check your credentials.');
         }
-        if(await !bcrypt.compare(req.body.password, dbUser.password)) {
-            console.log(`Bad Login attempt for ${dbUser.username}`);
-            return res.send('Something went wrong! Check your credentials.');
+        if(await bcrypt.compare(req.body.password, dbUser.password)) {
+            console.log("This one's good!")
+            const responseUser={
+                username: dbUser.username,
+                displayName: dbUser.displayName,
+                characters: dbUser.characters,
+            }
+            res.json(responseUser)
         }
-        console.log("This one's good!")
-        const responseUser={
-            username: dbUser.username,
-            displayName: dbUser.displayName,
-            characters: dbUser.characters,
-        }
-        res.json(responseUser)
+        console.log(`Bad Login attempt for ${dbUser.username}`);
+        return res.send('Something went wrong! Check your credentials.');
     } catch (err){
         res.send({error: 'Error, Invalid data'});
         console.log(err);
