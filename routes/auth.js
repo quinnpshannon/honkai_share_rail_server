@@ -15,7 +15,7 @@ router.post('/signup', async (req, res) => {
         if(emailInUse) {
             return res.send('Email in use!');
         }
-        const userInUse = await User.findOne({email: req.body.email});
+        const userInUse = await User.findOne({username: req.body.username});
         if(userInUse) {
             return res.send('Username Taken!');
         }
